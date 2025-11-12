@@ -30,9 +30,10 @@
     "message": ""
   },
   "meta": {
-    "lastBackup": "\u2014",
-    "lastRestore": "\u2014",
+    "lastBackup": "—",
+    "lastRestore": "—",
     "backupStatus": "Idle",
     "totalFiles": 0
   }
 }
+

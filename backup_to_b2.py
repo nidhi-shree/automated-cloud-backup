@@ -95,7 +95,7 @@ def backup_site_to_b2(*, load_env_vars: bool = True) -> int:
     if load_env_vars:
         load_env()
 
-    site_dir = Path(os.getenv("SITE_DIR", "site"))
+    site_dir = Path(os.getenv("SITE_DIR", "docs"))
     if not site_dir.exists() or not site_dir.is_dir():
         raise FileNotFoundError(f"Site directory '{site_dir}' does not exist.")
 
@@ -103,7 +103,7 @@ def backup_site_to_b2(*, load_env_vars: bool = True) -> int:
     if not bucket_name:
         raise ValueError("B2_BUCKET_NAME is not set.")
 
-    prefix = os.getenv("B2_PREFIX", "site")
+    prefix = os.getenv("B2_PREFIX", "docs")
 
     b2_api = init_b2()
     bucket = ensure_bucket(b2_api, bucket_name)

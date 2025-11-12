@@ -11,7 +11,7 @@ from backup_to_b2 import backup_site_to_b2
 
 
 ROOT = Path(__file__).resolve().parent
-SITE_DIR = ROOT / "site"
+SITE_DIR = ROOT / "docs"
 CONTENT_PATH = SITE_DIR / "data" / "content.json"
 
 load_dotenv(override=False)

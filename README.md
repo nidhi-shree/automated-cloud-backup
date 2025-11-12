@@ -12,8 +12,8 @@ Tech stack: Python 3.x, `b2sdk`, `python-dotenv`, Git/GitHub Pages, Backblaze B2
 
 ## Features
 
-- 3-page responsive site in `site/` with a clean, professional design
-- `backup_to_b2.py`: uploads all `site/` files to your Backblaze B2 bucket
+- 3-page responsive site in `docs/` with a clean, professional design
+- `backup_to_b2.py`: uploads all `docs/` files to your Backblaze B2 bucket
 - `restore_from_b2.py`: downloads from B2 and commits/pushes changes to redeploy GitHub Pages
 - Secure environment variables via `.env` (template included)
 - Logging and helpful error messages
@@ -28,12 +28,14 @@ automated-cloud-backup/
 ├─ requirements.txt
 ├─ backup_to_b2.py
 ├─ restore_from_b2.py
-├─ site/
+├─ server.py
+├─ docs/
 │  ├─ index.html
 │  ├─ about.html
 │  ├─ contact.html
 │  ├─ css/styles.css
-│  └─ js/main.js
+│  ├─ js/main.js
+│  └─ data/content.json
 └─ README.md
 ```
 
@@ -43,20 +45,20 @@ automated-cloud-backup/
 
 ## Frontend Editing (Live content via content.json)
 
-The site now loads visible text from `site/data/content.json`. A floating toolbar is available on every page:
+The site now loads visible text from `docs/data/content.json`. A floating toolbar is available on every page:
 
 - 🖋️ Edit Mode: toggles inline editing of content
 - 💾 Save Changes: writes your edits back to `content.json`
-- ⬆️ Backup Now: copies the backup command to your clipboard
-- 🧹 Simulate Disaster: copies a command to delete `site/` locally (demo)
-- 🔁 Restore Backup: copies the restore command to your clipboard
+- ☁️ Backup: triggers automatic backup to Backblaze B2
+- 🔁 Restore: triggers restore from Backblaze B2
+- ⚠️ Simulate Disaster: copies a command to delete `docs/` locally (demo)
 
 How saving works:
-- The site attempts to use the browser’s File System Access API to overwrite `site/data/content.json`.
-- If not supported (e.g., on GitHub Pages), it falls back to download a file named `content.json`. Replace the file at `site/data/content.json` with the downloaded one.
-- Either way, the updated `content.json` is a normal file inside `site/` and is included in backups.
+- The site saves changes via the Flask backend to `docs/data/content.json`.
+- Saving automatically triggers a backup to Backblaze B2.
+- Either way, the updated `content.json` is a normal file inside `docs/` and is included in backups.
 
-Data format (`site/data/content.json`):
+Data format (`docs/data/content.json`):
 ```json
 {
   "title": "Disaster Recovery Dashboard",
@@ -75,8 +77,8 @@ Data format (`site/data/content.json`):
 ```
 
 Notes:
-- Browsers cannot directly execute local shell commands or delete local folders for security reasons. The toolbar buttons copy commands (e.g., `python backup_to_b2.py`) to your clipboard and show toasts with instructions.
-- When developing locally (opened from the file system), some browsers may restrict `fetch` from reading local JSON. Use a simple local server if needed (e.g., `python -m http.server` in the `site/` directory).
+- The Flask backend (`server.py`) handles saving content and triggering backup/restore operations.
+- When developing locally, run `python server.py` and access the site at http://localhost:5000.
 
 ---
 
@@ -105,8 +107,8 @@ B2_APPLICATION_KEY=YOUR_APP_KEY
 B2_BUCKET_NAME=your-bucket-name
 
 # Optional (defaults shown)
-B2_PREFIX=site
-SITE_DIR=site
+B2_PREFIX=docs
+SITE_DIR=docs
 GIT_REMOTE=origin
 GIT_BRANCH=main
 ```
@@ -128,10 +130,10 @@ There are multiple ways to serve GitHub Pages. The simplest for this project:
 3. Under "Build and deployment":
    - Source: Deploy from a branch
    - Branch: `main` (or your default branch)
-   - Folder: `/site`
-4. Save. GitHub Pages will build and serve your site from the `site/` folder.
+   - Folder: `/docs`
+4. Save. GitHub Pages will build and serve your site from the `docs/` folder.
 
-Now any commit that changes files in `site/` will automatically redeploy your site.
+Now any commit that changes files in `docs/` will automatically redeploy your site.
 
 ---
 
@@ -155,10 +157,10 @@ Now any commit that changes files in `site/` will automatically redeploy your si
 
 ### In-Browser Editing & Automation
 - Toggle **✏️ Edit Mode** to make sections editable.
-- **💾 Save** writes live changes to `site/data/content.json` via the Flask backend.
+- **💾 Save** writes live changes to `docs/data/content.json` via the Flask backend and automatically backs up to Backblaze B2.
 - **☁️ Backup** triggers `backup_to_b2.py` (Backblaze upload).
 - **🔁 Restore** triggers `restore_from_b2.py` (download + git deploy).
-- **⚠️ Simulate Disaster** copies a command you can run manually to delete the `site/` folder (for demo safety).
+- **⚠️ Simulate Disaster** copies a command you can run manually to delete the `docs/` folder (for demo safety).
 
 Saving automatically pushes the latest content to Backblaze B2, so edits are backed up immediately after each save.
 
@@ -189,7 +191,7 @@ After pushing, GitHub Pages will update automatically (usually within a minute).
 - `restore_from_b2.py`:
   - Lists objects under `B2_PREFIX/` and downloads to `SITE_DIR`
   - Adds, commits, and pushes the changes to your repo (`GIT_REMOTE`/`GIT_BRANCH`)
-  - GitHub Pages serves from the `/site` folder, so the push redeploys the site
+  - GitHub Pages serves from the `/docs` folder, so the push redeploys the site
 
 ---
 

@@ -170,7 +170,7 @@
       const wrote = await saveToFileSystem(jsonString);
       if (!wrote) {
         downloadFile('content.json', jsonString);
-        toast('Downloaded content.json — replace file in site/data (optional backup).', 'info');
+        toast('Downloaded content.json — replace file in docs/data (optional backup).', 'info');
       }
       state.data = updated;
     } catch (e) {
@@ -213,7 +213,7 @@
       }
     });
     if (disaster) disaster.addEventListener('click', () => {
-      copyToClipboard('Remove-Item -Recurse -Force site');
+      copyToClipboard('Remove-Item -Recurse -Force docs');
       toast('⚠️ Simulated disaster (command copied)', 'warning');
     });
     if (restore) restore.addEventListener('click', async () => {

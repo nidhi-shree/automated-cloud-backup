@@ -156,8 +156,8 @@ def main() -> None:
     load_env()
 
     bucket_name = get_env("B2_BUCKET_NAME", required=True)
-    prefix = get_env("B2_PREFIX", default="site")
-    site_dir = Path(get_env("SITE_DIR", default="site"))
+    prefix = get_env("B2_PREFIX", default="docs")
+    site_dir = Path(get_env("SITE_DIR", default="docs"))
     git_remote = get_env("GIT_REMOTE", default="origin")
     git_branch = get_env("GIT_BRANCH", default="main")
 
