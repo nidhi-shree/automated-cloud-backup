@@ -1,0 +1,19 @@
+# Ignore Python virtual environments
+venv/
+.env
+
+# Ignore system files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# macOS & Windows
+.DS_Store
+Thumbs.db

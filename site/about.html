@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About • Automated Cloud Backup & Disaster Recovery</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">Cloud Backup DR</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a class="active" href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button id="editToggle" class="toolbar-btn">🖋️ Edit Mode</button>
+    <button id="saveChanges" class="toolbar-btn" disabled>💾 Save Changes</button>
+    <button id="backupNow" class="toolbar-btn">☁️ Backup</button>
+    <button id="restoreNow" class="toolbar-btn">🔁 Restore</button>
+    <button id="simulateDisaster" class="toolbar-btn warn">⚠️ Simulate Disaster</button>
+  </div>
+
+  <main class="container content">
+    <h1>About This Project</h1>
+    <p data-bind="about.intro">This project demonstrates DevOps automation for static websites using free cloud tools.</p>
+
+    <div class="card stack">
+      <h2>Technologies</h2>
+      <ul class="checklist">
+        <li>Python 3.x</li>
+        <li>b2sdk (official Backblaze B2 SDK)</li>
+        <li>python-dotenv for secure environment variables</li>
+        <li>Git & GitHub Pages for hosting</li>
+        <li>HTML, CSS (Flex/Grid), JavaScript</li>
+      </ul>
+    </div>
+
+    <div class="card stack">
+      <h2>Architecture</h2>
+      <p>Website → Backblaze B2 → Disaster → Restore → GitHub Pages</p>
+    </div>
+
+    <div class="card stack">
+      <h2>How It Works</h2>
+      <ol data-repeat="about.workflow">
+        <li>Backup to Backblaze B2</li>
+      </ol>
+    </div>
+
+    <p>
+      Use this as a foundation for your own disaster recovery playbooks, or as a demo for
+      portfolio and proof-of-concept automation.
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Automated Cloud Backup & DR.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/editor.js"></script>
+</body>
+</html>
+
+

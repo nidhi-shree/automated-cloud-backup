@@ -1,0 +1,38 @@
+{
+  "home": {
+    "title": "Automated Backup & Recovery System...",
+    "subtitle": "Resilient websites that recover themselves.",
+    "features": [
+      {
+        "title": "Automatic Cloud Backup",
+        "desc": "Every change is saved to Backblaze B2 automatically."
+      },
+      {
+        "title": "Disaster Simulation",
+        "desc": "Test failures and recover instantly."
+      },
+      {
+        "title": "GitHub Pages Deployment",
+        "desc": "Redeploy live after restoring."
+      }
+    ]
+  },
+  "about": {
+    "intro": "",
+    "workflow": [
+      "Backup to Backblaze B2",
+      "Simulate a data loss",
+      "Restore and redeploy"
+    ]
+  },
+  "contact": {
+    "email": "",
+    "message": ""
+  },
+  "meta": {
+    "lastBackup": "\u2014",
+    "lastRestore": "\u2014",
+    "backupStatus": "Idle",
+    "totalFiles": 0
+  }
+}

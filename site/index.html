@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automated Cloud Backup & Disaster Recovery</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">Cloud Backup DR</a>
+      <nav class="nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button id="editToggle" class="toolbar-btn">🖋️ Edit Mode</button>
+    <button id="saveChanges" class="toolbar-btn" disabled>💾 Save Changes</button>
+    <button id="backupNow" class="toolbar-btn">☁️ Backup</button>
+    <button id="restoreNow" class="toolbar-btn">🔁 Restore</button>
+    <button id="simulateDisaster" class="toolbar-btn warn">⚠️ Simulate Disaster</button>
+  </div>
+
+  <main>
+    <section class="hero fade-in">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 data-bind="home.title">Automated Cloud Backup & Disaster Recovery</h1>
+          <p class="subtitle" data-bind="home.subtitle">Resilient websites that recover themselves.</p>
+          <div class="hero-cta">
+            <button class="btn primary" id="backupNowHero">Run Backup ☁️</button>
+            <button class="btn" id="restoreNowHero">Restore Backup 🔁</button>
+            <button class="btn warn" id="simulateDisasterHero">Simulate Disaster ⚠️</button>
+            <button class="btn" id="editToggleHero">Edit Mode ✏️</button>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="card">
+            <h3>What’s included</h3>
+            <ul>
+              <li>Responsive 3-page static website</li>
+              <li>Python backup & restore scripts</li>
+              <li>Secure .env configuration</li>
+              <li>GitHub Pages deployment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <div class="container">
+        <div class="grid-4">
+          <div class="card metric">
+            <div class="label">Last Backup</div>
+            <div class="value" data-metric="lastBackup">—</div>
+          </div>
+          <div class="card metric">
+            <div class="label">Last Restore</div>
+            <div class="value" data-metric="lastRestore">—</div>
+          </div>
+          <div class="card metric">
+            <div class="label">Backup Status</div>
+            <div class="value" data-metric="backupStatus">Idle</div>
+          </div>
+          <div class="card metric">
+            <div class="label">Total Files</div>
+            <div class="value" data-metric="totalFiles">0</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container">
+      <div class="grid-3" data-repeat="home.features" id="featuresList">
+      </div>
+      <template id="featureTemplate">
+        <div class="feature" data-repeat-item>
+          <div class="icon">⭐</div>
+          <h3 data-feature="title">Feature</h3>
+          <p data-feature="desc">Description</p>
+        </div>
+      </template>
+    </section>
+
+    <section class="container">
+      <div class="card">
+        <h3>Workflow</h3>
+        <p>Website → Backblaze B2 → Disaster → Restore → GitHub Pages</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Automated Cloud Backup Demo | Last Backup: <span id="lastBackupFooter">—</span></p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/editor.js"></script>
+  <script>
+    // Mirror hero buttons to toolbar actions
+    const mapBtn = (srcId, dstId) => {
+      const s = document.getElementById(srcId);
+      const d = document.getElementById(dstId);
+      if (s && d) s.addEventListener('click', () => d.click());
+    };
+    mapBtn('backupNowHero', 'backupNow');
+    mapBtn('restoreNowHero', 'restoreNow');
+    mapBtn('simulateDisasterHero', 'simulateDisaster');
+    mapBtn('editToggleHero', 'editToggle');
+  </script>
+</body>
+</html>
+
+
