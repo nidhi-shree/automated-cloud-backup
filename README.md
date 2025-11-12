@@ -225,8 +225,5 @@ After pushing, GitHub Pages will update automatically (usually within a minute).
 
 ---
 
-## License
-
-MIT — use freely for demos and learning.
 
 
