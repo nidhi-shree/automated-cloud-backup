@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Automated Backup & Recovery System...",
+    "title": "Automated Backup & Recovery System",
     "subtitle": "Resilient websites that recover themselves.",
     "features": [
       {
@@ -30,10 +30,9 @@
     "message": ""
   },
   "meta": {
-    "lastBackup": "—",
-    "lastRestore": "—",
+    "lastBackup": "\u2014",
+    "lastRestore": "\u2014",
     "backupStatus": "Idle",
     "totalFiles": 0
   }
 }
-

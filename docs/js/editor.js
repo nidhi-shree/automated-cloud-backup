@@ -141,23 +141,43 @@
     URL.revokeObjectURL(url);
   }
 
-  async function postJSON(url, body) {
-    const res = await fetch(url, {
+  function getAuthHeaders() {
+    const token = localStorage.getItem('admin_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+  }
+
+  async function postJSON(url, data) {
+    const resp = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data)
     });
-    let payload = {};
-    try {
-      payload = await res.json();
-    } catch {
-      // ignore parse errors
+    if (!resp.ok) {
+      const text = await resp.text();
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        throw new Error(`HTTP ${resp.status}: ${text}`);
+      }
+      if (resp.status === 401) {
+        promptForAuth();
+      }
+      throw new Error(parsed.message || `HTTP ${resp.status}`);
     }
-    if (!res.ok) {
-      const message = payload.message || res.statusText || 'Request failed';
-      throw new Error(message);
+    return resp.json();
+  }
+
+  function promptForAuth() {
+    const token = prompt('Enter admin token (optional - leave blank if auth disabled):');
+    if (token) {
+      localStorage.setItem('admin_token', token);
+      toast('Token saved. Try your action again.', 'info');
     }
-    return payload;
   }
 
   async function onSave() {
@@ -186,6 +206,19 @@
     );
   }
 
+  // Add auth management button
+  function addAuthButton() {
+    const toolbar = document.querySelector('.toolbar');
+    if (toolbar && !document.getElementById('authBtn')) {
+      const authBtn = document.createElement('button');
+      authBtn.id = 'authBtn';
+      authBtn.className = 'toolbar-btn';
+      authBtn.textContent = '🔐 Auth';
+      authBtn.addEventListener('click', promptForAuth);
+      toolbar.appendChild(authBtn);
+    }
+  }
+
   function wireToolbar() {
     const edit = $('#editToggle');
     const save = $('#saveChanges');
@@ -212,9 +245,22 @@
         backup.textContent = '☁️ Backup';
       }
     });
-    if (disaster) disaster.addEventListener('click', () => {
-      copyToClipboard('Remove-Item -Recurse -Force docs');
-      toast('⚠️ Simulated disaster (command copied)', 'warning');
+    if (disaster) disaster.addEventListener('click', async () => {
+      if (!confirm('⚠️ This will simulate a disaster by removing the docs directory. A backup will be created first. Continue?')) {
+        return;
+      }
+      try {
+        disaster.disabled = true;
+        disaster.textContent = '🚨 Simulating...';
+        const resp = await postJSON('/simulate-disaster', {});
+        toast(resp.message || '🚨 Disaster simulated!', 'warning');
+      } catch (err) {
+        toast(`Disaster simulation failed: ${err.message}`, 'error');
+        console.error(err);
+      } finally {
+        disaster.disabled = false;
+        disaster.textContent = '⚠️ Simulate Disaster';
+      }
     });
     if (restore) restore.addEventListener('click', async () => {
       try {
@@ -232,11 +278,52 @@
     });
   }
 
+  async function loadMetrics() {
+    try {
+      const resp = await fetch('/metrics');
+      if (resp.ok) {
+        const metrics = await resp.json();
+        updateMetricsDisplay(metrics);
+      }
+    } catch (e) {
+      console.error('Failed to load metrics:', e);
+    }
+  }
+
+  function updateMetricsDisplay(metrics) {
+    const elements = {
+      lastBackup: document.querySelector('[data-metric="lastBackup"]'),
+      lastRestore: document.querySelector('[data-metric="lastRestore"]'),
+      backupStatus: document.querySelector('[data-metric="backupStatus"]'),
+      totalFiles: document.querySelector('[data-metric="totalFiles"]')
+    };
+
+    if (elements.lastBackup) {
+      elements.lastBackup.textContent = metrics.last_backup ? 
+        new Date(metrics.last_backup).toLocaleString() : '—';
+    }
+    if (elements.lastRestore) {
+      elements.lastRestore.textContent = metrics.last_restore ? 
+        new Date(metrics.last_restore).toLocaleString() : '—';
+    }
+    if (elements.backupStatus) {
+      elements.backupStatus.textContent = metrics.backup_status || 'Idle';
+    }
+    if (elements.totalFiles) {
+      elements.totalFiles.textContent = metrics.total_files || 0;
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
     try {
       await loadData();
       render();
       wireToolbar();
+      addAuthButton();
+      await loadMetrics();
+      
+      // Refresh metrics every 30 seconds
+      setInterval(loadMetrics, 30000);
     } catch (e) {
       console.error(e);
       toast('Failed to load content.json', 'error');
