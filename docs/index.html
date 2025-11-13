@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <header class="site-header">
@@ -22,11 +23,11 @@
   </header>
 
   <div class="toolbar">
-    <button id="editToggle" class="toolbar-btn">🖋️ Edit Mode</button>
-    <button id="saveChanges" class="toolbar-btn" disabled>💾 Save Changes</button>
-    <button id="backupNow" class="toolbar-btn">☁️ Backup</button>
-    <button id="restoreNow" class="toolbar-btn">🔁 Restore</button>
-    <button id="simulateDisaster" class="toolbar-btn warn">⚠️ Simulate Disaster</button>
+    <button id="editToggle" class="toolbar-btn"><i class="fas fa-edit"></i> Edit Mode</button>
+    <button id="saveChanges" class="toolbar-btn" disabled><i class="fas fa-save"></i> Save Changes</button>
+    <button id="backupNow" class="toolbar-btn"><i class="fas fa-cloud-upload-alt"></i> Backup</button>
+    <button id="restoreNow" class="toolbar-btn"><i class="fas fa-redo"></i> Restore</button>
+    <button id="simulateDisaster" class="toolbar-btn warn"><i class="fas fa-bolt"></i> Simulate Disaster</button>
   </div>
 
   <main>
@@ -36,20 +37,22 @@
           <h1 data-bind="home.title">Automated Cloud Backup & Disaster Recovery</h1>
           <p class="subtitle" data-bind="home.subtitle">Resilient websites that recover themselves.</p>
           <div class="hero-cta">
-            <button class="btn primary" id="backupNowHero">Run Backup ☁️</button>
-            <button class="btn" id="restoreNowHero">Restore Backup 🔁</button>
-            <button class="btn warn" id="simulateDisasterHero">Simulate Disaster ⚠️</button>
-            <button class="btn" id="editToggleHero">Edit Mode ✏️</button>
+            <button class="btn primary" id="backupNowHero"><i class="fas fa-cloud-upload-alt"></i> Run Backup</button>
+            <button class="btn" id="restoreNowHero"><i class="fas fa-redo"></i> Restore Backup</button>
+            <button class="btn warn" id="simulateDisasterHero"><i class="fas fa-bolt"></i> Simulate Disaster</button>
+            <button class="btn" id="editToggleHero"><i class="fas fa-edit"></i> Edit Mode</button>
           </div>
         </div>
         <div class="hero-art">
           <div class="card">
-            <h3>What's included</h3>
-            <ul>
-              <li>Responsive 3-page static website</li>
-              <li>Python backup & restore scripts</li>
-              <li>Secure .env configuration</li>
-              <li>GitHub Pages deployment</li>
+            <h3><i class="fas fa-check-circle"></i> What's included</h3>
+            <ul class="feature-list">
+              <li><i class="fas fa-laptop-code"></i> Responsive 3-page static website</li>
+              <li><i class="fas fa-code"></i> Python backup & restore scripts</li>
+              <li><i class="fas fa-shield-alt"></i> Secure .env configuration</li>
+              <li><i class="fab fa-github"></i> GitHub Pages deployment</li>
+              <li><i class="fas fa-cloud"></i> Backblaze B2 cloud storage</li>
+              <li><i class="fas fa-sync-alt"></i> Automated recovery system</li>
             </ul>
           </div>
         </div>
@@ -60,19 +63,19 @@
       <div class="container">
         <div class="grid-4">
           <div class="card metric">
-            <div class="label">Last Backup</div>
+            <div class="label"><i class="fas fa-history"></i> Last Backup</div>
             <div class="value" data-metric="lastBackup">—</div>
           </div>
           <div class="card metric">
-            <div class="label">Last Restore</div>
+            <div class="label"><i class="fas fa-redo"></i> Last Restore</div>
             <div class="value" data-metric="lastRestore">—</div>
           </div>
           <div class="card metric">
-            <div class="label">Backup Status</div>
+            <div class="label"><i class="fas fa-cloud"></i> Backup Status</div>
             <div class="value" data-metric="backupStatus">Idle</div>
           </div>
           <div class="card metric">
-            <div class="label">Total Files</div>
+            <div class="label"><i class="fas fa-file"></i> Total Files</div>
             <div class="value" data-metric="totalFiles">0</div>
           </div>
         </div>
@@ -81,27 +84,60 @@
 
     <section class="features container">
       <div class="grid-3" data-repeat="home.features" id="featuresList">
-      </div>
-      <template id="featureTemplate">
-        <div class="feature" data-repeat-item>
-          <div class="icon">⭐</div>
-          <h3 data-feature="title">Feature</h3>
-          <p data-feature="desc">Description</p>
+        <div class="feature">
+          <div class="icon"><i class="fas fa-robot"></i></div>
+          <h3>Automatic Cloud Backup</h3>
+          <p>Automated daily backups to secure cloud storage with version history and point-in-time recovery.</p>
         </div>
-      </template>
+        <div class="feature">
+          <div class="icon"><i class="fas fa-bolt"></i></div>
+          <h3>Disaster Recovery</h3>
+          <p>One-click restoration with automated failover to ensure business continuity during outages.</p>
+        </div>
+        <div class="feature">
+          <div class="icon"><i class="fab fa-github"></i></div>
+          <h3>GitHub Pages Deployment</h3>
+          <p>Seamless integration with GitHub Pages for automatic deployment and version control.</p>
+        </div>
+      </div>
     </section>
 
     <section class="container">
       <div class="card">
-        <h3>Workflow</h3>
-        <p>Website → Backblaze B2 → Disaster → Restore → GitHub Pages</p>
+        <h3><i class="fas fa-sitemap"></i> Workflow</h3>
+        <div class="workflow-steps">
+          <div class="step">
+            <i class="fas fa-globe"></i>
+            <span>Website</span>
+          </div>
+          <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <i class="fas fa-cloud"></i>
+            <span>Backblaze B2</span>
+          </div>
+          <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <i class="fas fa-bolt"></i>
+            <span>Disaster</span>
+          </div>
+          <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <i class="fas fa-redo"></i>
+            <span>Restore</span>
+          </div>
+          <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <i class="fab fa-github"></i>
+            <span>GitHub Pages</span>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© <span id="year"></span> Automated Cloud Backup Demo | Last Backup: <span id="lastBackupFooter">—</span></p>
+      <p><i class="far fa-copyright"></i> <span id="year"></span> Automated Cloud Backup Demo | <i class="fas fa-history"></i> Last Backup: <span id="lastBackupFooter">—</span></p>
     </div>
   </footer>
 
@@ -109,6 +145,9 @@
   <script src="js/toast.js"></script>
   <script src="js/editor.js"></script>
   <script>
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
     // Mirror hero buttons to toolbar actions
     const mapBtn = (srcId, dstId) => {
       const s = document.getElementById(srcId);
@@ -122,4 +161,3 @@
   </script>
 </body>
 </html>
-

@@ -79,7 +79,15 @@
       }
     });
     const btn = $('#editToggle');
-    if (btn) btn.textContent = on ? 'Exit Edit Mode' : '🖋️ Edit Mode';
+    if (btn) {
+      // Preserve the icon while changing text
+      const icon = btn.querySelector('i');
+      if (icon) {
+        btn.innerHTML = icon.outerHTML + (on ? ' Exit Edit Mode' : ' Edit Mode');
+      } else {
+        btn.textContent = on ? 'Exit Edit Mode' : 'Edit Mode';
+      }
+    }
     const saveBtn = $('#saveChanges');
     if (saveBtn) saveBtn.disabled = !on;
   }
@@ -212,8 +220,8 @@
     if (toolbar && !document.getElementById('authBtn')) {
       const authBtn = document.createElement('button');
       authBtn.id = 'authBtn';
-      authBtn.className = 'toolbar-btn';
-      authBtn.textContent = '🔐 Auth';
+      authBtn.classList.add('toolbar-btn', 'auth');
+      authBtn.innerHTML = '<i class="fas fa-key"></i> Auth';
       authBtn.addEventListener('click', promptForAuth);
       toolbar.appendChild(authBtn);
     }
@@ -234,15 +242,26 @@
     if (backup) backup.addEventListener('click', async () => {
       try {
         backup.disabled = true;
-        backup.textContent = '☁️ Backing up...';
+        // Preserve the icon while changing text
+        const icon = backup.querySelector('i');
+        if (icon) {
+          backup.innerHTML = icon.outerHTML + ' Backing up...';
+        } else {
+          backup.textContent = 'Backing up...';
+        }
         const resp = await postJSON('/backup', {});
-        toast(resp.message || '☁️ Backup complete.', 'success');
+        toast(resp.message || 'Backup complete.', 'success');
       } catch (err) {
         toast(`Backup failed: ${err.message}`, 'error');
         console.error(err);
       } finally {
         backup.disabled = false;
-        backup.textContent = '☁️ Backup';
+        const icon = backup.querySelector('i');
+        if (icon) {
+          backup.innerHTML = icon.outerHTML + ' Backup';
+        } else {
+          backup.textContent = 'Backup';
+        }
       }
     });
     if (disaster) disaster.addEventListener('click', async () => {
@@ -251,7 +270,13 @@
       }
       try {
         disaster.disabled = true;
-        disaster.textContent = '🚨 Simulating...';
+        // Preserve the icon while changing text
+        const icon = disaster.querySelector('i');
+        if (icon) {
+          disaster.innerHTML = icon.outerHTML + ' Simulating...';
+        } else {
+          disaster.textContent = '🚨 Simulating...';
+        }
         const resp = await postJSON('/simulate-disaster', {});
         toast(resp.message || '🚨 Disaster simulated!', 'warning');
       } catch (err) {
@@ -259,13 +284,24 @@
         console.error(err);
       } finally {
         disaster.disabled = false;
-        disaster.textContent = '⚠️ Simulate Disaster';
+        const icon = disaster.querySelector('i');
+        if (icon) {
+          disaster.innerHTML = icon.outerHTML + ' Simulate Disaster';
+        } else {
+          disaster.textContent = '⚠️ Simulate Disaster';
+        }
       }
     });
     if (restore) restore.addEventListener('click', async () => {
       try {
         restore.disabled = true;
-        restore.textContent = '🔁 Restoring...';
+        // Preserve the icon while changing text
+        const icon = restore.querySelector('i');
+        if (icon) {
+          restore.innerHTML = icon.outerHTML + ' Restoring...';
+        } else {
+          restore.textContent = '🔁 Restoring...';
+        }
         const resp = await postJSON('/restore', {});
         toast(resp.message || '🔁 Restore complete.', 'success');
       } catch (err) {
@@ -273,7 +309,12 @@
         console.error(err);
       } finally {
         restore.disabled = false;
-        restore.textContent = '🔁 Restore';
+        const icon = restore.querySelector('i');
+        if (icon) {
+          restore.innerHTML = icon.outerHTML + ' Restore';
+        } else {
+          restore.textContent = '🔁 Restore';
+        }
       }
     });
   }
@@ -330,5 +371,3 @@
     }
   });
 })();
-
-
