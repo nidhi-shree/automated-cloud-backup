@@ -1,50 +1,20 @@
 {
   "home": {
-    "title": "Enterprise Disaster Recovery System",
-    "subtitle": "Zero-downtime backup and recovery for mission-critical websites.",
-    "features": [
-      {
-        "title": "Real-time Backup",
-        "desc": "Automatic cloud backup on every change with SHA256 integrity verification and retry logic."
-      },
-      {
-        "title": "60-Second Recovery",
-        "desc": "Complete site restoration from total data loss in under 60 seconds with zero manual intervention."
-      },
-      {
-        "title": "Live Content Management",
-        "desc": "Professional web interface with real-time editing, instant preview, and collaborative features."
-      },
-      {
-        "title": "Enterprise Monitoring",
-        "desc": "24/7 health monitoring with email alerts, desktop notifications, and comprehensive audit logs."
-      },
-      {
-        "title": "Security & Compliance",
-        "desc": "Token-based authentication, encrypted storage, and detailed audit trails for regulatory compliance."
-      },
-      {
-        "title": "Cost-Effective Scale",
-        "desc": "Pennies per month operating cost with enterprise-grade reliability and unlimited scalability."
-      }
-    ]
+    "title": "Automated Backup & Recovery System",
+    "subtitle": "Resilient websites that recover themselves...",
+    "features": []
   },
   "about": {
-    "intro": "This enterprise-grade disaster recovery system demonstrates how modern businesses can achieve 99.99% uptime with automated backup, monitoring, and recovery capabilities. Built with production-ready technologies and battle-tested in real-world scenarios.",
+    "intro": "",
     "workflow": [
-      "Content editors make changes via secure web interface",
-      "System automatically validates and saves changes to content.json",
-      "Instant backup to Backblaze B2 with integrity verification",
-      "Real-time monitoring tracks backup health and system status",
-      "Disaster simulation safely tests recovery procedures",
-      "One-click recovery restores complete site from cloud backup",
-      "Optional automated deployment to GitHub Pages or custom servers",
-      "Email and desktop alerts notify administrators of any issues"
+      "Backup to Backblaze B2",
+      "Simulate a data loss",
+      "Restore and redeploy"
     ]
   },
   "contact": {
-    "email": "enterprise@disasterrecovery.demo",
-    "message": "Ready to protect your business from data loss? Contact our enterprise team to discuss custom disaster recovery solutions, SLA guarantees, and white-label deployment options."
+    "email": "",
+    "message": ""
   },
   "meta": {
     "lastBackup": "\u2014",
