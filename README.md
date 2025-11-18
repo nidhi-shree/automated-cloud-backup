@@ -149,7 +149,7 @@ Stores logs in:
 
 ### ✅ GitHub Pages Hosting
 The `/docs` folder is served publicly via:  
-`https://USERNAME.github.io/REPO/`
+`https://nidhi-shree.github.io/automated-cloud-backup/`
 
 ### ✅ Frontend Editing (Live content via content.json)
 
