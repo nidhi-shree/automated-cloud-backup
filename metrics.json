@@ -1,0 +1,9 @@
+{
+  "last_disaster": "2025-11-18T14:20:34.813392Z",
+  "disaster_status": "simulated",
+  "last_restore": "2025-11-18T14:21:20.753416Z",
+  "restore_status": "success",
+  "last_backup": "2025-11-18T14:00:20.443850Z",
+  "backup_status": "success",
+  "total_files": 8
+}

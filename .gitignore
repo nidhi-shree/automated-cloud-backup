@@ -17,3 +17,9 @@ __pycache__/
 # macOS & Windows
 .DS_Store
 Thumbs.db
+
+DEMO_SCRIPT.md
+VIDEO_DEMO_SCRIPT.md
+setup_scheduler.ps1
+schedule_backup.bat
+

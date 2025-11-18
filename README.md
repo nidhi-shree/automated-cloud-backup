@@ -1,62 +1,170 @@
-# Automated Cloud Backup and Disaster Recovery System
 
-A complete mini project that:
+# Automated Cloud Backup & Disaster Recovery System
 
-- Hosts a responsive static website on **GitHub Pages**
-- Automatically backs up the site to **Backblaze B2**
+
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg)](https://flask.palletsprojects.com)
+[![Backblaze B2](https://img.shields.io/badge/Backblaze-B2-red.svg)](https://backblaze.com)
+[![Github pages](https://img.shields.io/badge/GitHub-Pages-blue?logo=github)](#)
+
+
+
+## This project is a fully automated cloud-backup and disaster-recovery system designed to protect a static website and supporting files using Backblaze B2 Cloud Storage, Flask, and Python automation scripts.
+It provides:
+
+✔ Automatic scheduled backups
+✔ Instant disaster simulation
+✔ One-click website restoration
+✔ Real-time monitoring dashboard
+✔ GitHub Pages hosting for the public website (/docs)
+✔ A persistent /admin control panel that cannot be deleted
+
+---
+
+## 📌 Table of Contents
+
+1. [Project Overview](#1-project-overview)
+2. [System Architecture](#2-system-architecture)
+3. [Project Structure](#3-project-structure)
+4. [Features](#4-features)
+5. [Technologies Used](#5-technologies-used)
+6. [Setup Instructions](#6-setup-instructions)
+7. [Environment Variables](#7-environment-variables)
+8. [Running the Project](#8-running-the-project)
+9. [Backup Workflow](#9-backup-workflow)
+10. [Disaster Simulation](#10-disaster-simulation)
+11. [Restore Workflow](#11-restore-workflow)
+12. [Monitoring & Logging](#12-monitoring--logging)
+13. [GitHub Pages Deployment](#13-github-pages-deployment)
+14. [Admin Control Panel](#14-admin-control-panel)
+15. [Future Improvements](#15-future-improvements)
+16. [Conclusion](#16-conclusion)
+
+---
+
+## 1. Project Overview
+
+This project solves a real-world problem:  
+**➡ what happens if your website files are accidentally deleted or corrupted?**
+
+To ensure your website always recovers, this system automatically:
+
+- Backs up `/docs(website) to **Backblaze B2**
+- Monitors backup status and logs it
+- Provides a web interface to simulate disaster and recover files instantly
 - Restores the site from B2 on demand and **redeploys** via `git push`
 
-Tech stack: Python 3.x, `b2sdk`, `python-dotenv`, Git/GitHub Pages, Backblaze B2, HTML/CSS/JS.
+It is fully automated and runs as a scheduled background job.
+
 
 ---
 
-## Features
+## 2. System Architecture
 
-- 3-page responsive site in `docs/` with a clean, professional design
-- `backup_to_b2.py`: uploads all `docs/` files to your Backblaze B2 bucket
-- `restore_from_b2.py`: downloads from B2 and commits/pushes changes to redeploy GitHub Pages
-- Secure environment variables via `.env` (template included)
-- Logging and helpful error messages
+┌───────────────────────────┐
+│       GitHub Pages        │
+│  Hosts the /docs website  │
+└──────────────┬────────────┘
+               │
+               ▼
+┌───────────────────────────┐
+│         Local App         │
+│  Flask + Python Scripts   │
+└──────────────┬────────────┘
+               │
+               ▼
+┌───────────────────────────┐
+│     Admin Dashboard       │
+│  /admin (never deleted)   │
+└──────────────┬────────────┘
+               │
+┌──────────────▼────────────┐
+│ Automated Backup Scripts  │
+│ backup_to_b2.py           │
+│ restore_from_b2.py        │
+│ disaster_recovery.py      │
+└──────────────┬────────────┘
+               │
+               ▼
+       Cloud Storage  
+     Backblaze B2 Bucket
+
 
 ---
 
-## Folder Structure
+## 3. Project Structure
 
-```
 automated-cloud-backup/
-├─ env.example                 # Copy to .env and fill in
-├─ requirements.txt
-├─ backup_to_b2.py
-├─ restore_from_b2.py
-├─ server.py
-├─ docs/
-│  ├─ index.html
-│  ├─ about.html
-│  ├─ contact.html
-│  ├─ css/styles.css
-│  ├─ js/main.js
-│  └─ data/content.json
-└─ README.md
-```
-
-> Note: Some environments hide dotfiles in editors. If you can't see `.env`, create it manually using `env.example` as a template.
+│
+├── docs/                        # Public website served by GitHub Pages
+│   ├── index.html
+│   ├── about.html
+│   ├── contact.html
+│   ├── css/
+│   ├── js/
+│   └── data/
+│
+├── server.py                    # Flask web server + Admin dashboard
+├── backup_to_b2.py              # Uploads latest backup to Backblaze B2
+├── restore_from_b2.py           # Restores from cloud backup
+├── disaster_recovery.py         # Deletes docs/ to simulate disaster
+├── monitor_backups.py           # Logs backup status & timestamps
+├── metrics.json                 # Stores backup metrics
+├── backup.log                   # Log file for monitoring
+│
+├── requirements.txt             # Python dependencies
+├── .env                         # API keys (ignored in Git)
+└── README.md                    # Project documentation
 
 ---
 
-## Frontend Editing (Live content via content.json)
+## 4. Features
 
-The site now loads visible text from `docs/data/content.json`. A floating toolbar is available on every page:
+### ✅ Automated Cloud Backups
+Automatically zips the `/docs` folder and uploads it to Backblaze B2.
 
-- 🖋️ Edit Mode: toggles inline editing of content
-- 💾 Save Changes: writes your edits back to `content.json`
-- ☁️ Backup: triggers automatic backup to Backblaze B2
-- 🔁 Restore: triggers restore from Backblaze B2
-- ⚠️ Simulate Disaster: copies a command to delete `docs/` locally (demo)
+### ✅ Disaster Simulation
+One-click "⚠ Simulate Disaster" deletes the entire website folder.
 
-How saving works:
-- The site saves changes via the Flask backend to `docs/data/content.json`.
-- Saving automatically triggers a backup to Backblaze B2.
-- Either way, the updated `content.json` is a normal file inside `docs/` and is included in backups.
+### ✅ Instant Recovery System
+One-click "🔁 Restore Website" downloads the backup and recreates the website.
+
+### ✅ Admin Dashboard
+Accessible at: `http://localhost:5000/admin`
+
+Shows:
+- Last backup time
+- Backup status
+- Restore button
+- Disaster simulation button
+- Backup logs
+
+### ✅ Scheduled Backups
+Using Windows Task Scheduler / Cron.
+
+### ✅ Full Logging & Monitoring
+Stores logs in:
+- `backup.log`
+- `metrics.json`
+
+### ✅ GitHub Pages Hosting
+The `/docs` folder is served publicly via:  
+`https://USERNAME.github.io/REPO/`
+
+### ✅ Frontend Editing (Live content via content.json)
+
+  The site now loads visible text from `docs/data/content.json`. A floating toolbar is available on every page:
+
+  - Edit Mode: toggles inline editing of content
+  - Save Changes: writes your edits back to `docs/data/content.json`.
+  - Backup: triggers automatic backup to Backblaze B2
+  - Restore: triggers restore from Backblaze B2
+  - Simulate Disaster: copies a command to delete `docs/` locally (demo)
+
+  How saving works:
+  - The site saves changes via the Flask backend to `docs/data/content.json`.
+  - Saving automatically triggers a backup to Backblaze B2.
+  - Either way, the updated `content.json` is a normal file inside `docs/` and is included in backups.
 
 Data format (`docs/data/content.json`):
 ```json
@@ -75,157 +183,329 @@ Data format (`docs/data/content.json`):
   }
 }
 ```
+## 🚀 **Quick Start**
 
-Notes:
-- The Flask backend (`server.py`) handles saving content and triggering backup/restore operations.
-- When developing locally, run `python server.py` and access the site at http://localhost:5000.
+### **1-Minute Setup**
 
----
+```bash
+# 1. Clone and install
+git clone <repository-url>
+cd automated-cloud-backup
+pip install -r requirements.txt
 
-## Backblaze B2 Setup (Free Tier)
+# 2. Configure environment
+cp env.example .env
+# Edit .env with your Backblaze B2 credentials
 
-1. Create a Backblaze account and enable B2 (free tier).
-2. Create a **Bucket**:
-   - Type: Private or Public (either is fine for this demo)
-   - Note the bucket name.
-3. Create an **App Key** (Application Key):
-   - Go to App Keys → Add a New Application Key
-   - Name it (e.g., `backup-site-key`)
-   - Capabilities: `listBuckets`, `readFiles`, `writeFiles`, `listFiles` are sufficient for this project
-   - Restrict bucket to your bucket if you want (optional)
-   - Copy the `keyID` and `applicationKey` (this pair is shown once)
-
----
-
-## Environment Variables
-
-Copy `env.example` to `.env` and fill in your values:
-
-```
-B2_APPLICATION_KEY_ID=YOUR_KEY_ID
-B2_APPLICATION_KEY=YOUR_APP_KEY
-B2_BUCKET_NAME=your-bucket-name
-
-# Optional (defaults shown)
-B2_PREFIX=docs
-SITE_DIR=docs
-GIT_REMOTE=origin
-GIT_BRANCH=main
+# 3. Start the system
+python server.py
 ```
 
-Explanation:
-- `B2_*`: Backblaze credentials and the destination bucket.
-- `B2_PREFIX`: Virtual folder/prefix in the bucket (keeps backups organized).
-- `SITE_DIR`: Local path to the static site.
-- `GIT_REMOTE` and `GIT_BRANCH`: Where to push changes that trigger GitHub Pages.
+### **Quick Demo**
 
----
+1. 🌐 **Open**: http://localhost:5000
+2. 🖋️ **Edit**: Click "Edit Mode" and modify content
+3. 💾 **Save**: Changes auto-backup to Backblaze B2
+4. 🚨 **Test**: Click "Simulate Disaster" 
+5. 🔄 **Recover**: Click "Restore" - site recovers in 60 seconds!
 
-## GitHub Pages Setup
 
-There are multiple ways to serve GitHub Pages. The simplest for this project:
+### 🔐 **Security Setup** (Recommended)
 
-1. Push this repository to GitHub.
-2. In your GitHub repo, go to Settings → Pages.
-3. Under "Build and deployment":
-   - Source: Deploy from a branch
-   - Branch: `main` (or your default branch)
-   - Folder: `/docs`
-4. Save. GitHub Pages will build and serve your site from the `docs/` folder.
+```bash
+# Add to your .env file
+ADMIN_TOKEN=your_secure_random_token_here
 
-Now any commit that changes files in `docs/` will automatically redeploy your site.
-
----
-
-## Installation
-
-1. Ensure Python 3.x is installed.
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-3. Create `.env` using `env.example` as a template and fill in your values.
-4. Run the local backend and open the dashboard:
-   ```
-   python server.py
-   ```
-   Then browse to http://localhost:5000
-
----
-
-## Usage
-
-### In-Browser Editing & Automation
-- Toggle **✏️ Edit Mode** to make sections editable.
-- **💾 Save** writes live changes to `docs/data/content.json` via the Flask backend and automatically backs up to Backblaze B2.
-- **☁️ Backup** triggers `backup_to_b2.py` (Backblaze upload).
-- **🔁 Restore** triggers `restore_from_b2.py` (download + git deploy).
-- **⚠️ Simulate Disaster** copies a command you can run manually to delete the `docs/` folder (for demo safety).
-
-Saving automatically pushes the latest content to Backblaze B2, so edits are backed up immediately after each save.
-
-Each action displays toast notifications with status messages.
-
-### Manual CLI usage (optional)
-You can still run the scripts yourself:
-
-```
-python backup_to_b2.py
+# Optional: Email alerts
+SMTP_SERVER=smtp.gmail.com
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+ALERT_EMAIL=admin@yourdomain.com
 ```
 
+> 🛡️ **Security Features**: Token auth, encrypted storage, audit logs
+
+---
+
+## 🔌 **API Reference**
+
+### **Public Endpoints**
+```http
+GET  /              # Website interface
+GET  /health        # System health check
+GET  /metrics       # Real-time metrics
 ```
-python restore_from_b2.py
+
+### **Authenticated Endpoints** (Require `ADMIN_TOKEN`)
+```http
+POST /save-content      # Save and backup content
+POST /backup            # Manual backup trigger
+POST /restore           # Disaster recovery
+POST /simulate-disaster # Safe disaster testing
 ```
 
-After pushing, GitHub Pages will update automatically (usually within a minute).
+### **Authentication**
+```bash
+# Include in request headers
+Authorization: Bearer your_admin_token_here
+```
+
+- `GET /` - Serve the website
+- `GET /health` - Health check endpoint
+- `GET /metrics` - Backup metrics and statistics
+- `POST /save-content` - Save content and trigger backup (auth required)
+- `POST /backup` - Manual backup trigger (auth required)
+- `POST /restore` - Restore from backup (auth required)
+- `POST /simulate-disaster` - Disaster simulation (auth required)
 
 ---
 
-## How It Works
+## 🔧 **Troubleshooting**
 
-- `backup_to_b2.py`:
-  - Authenticates with `b2sdk` using your app key
-  - Walks the `SITE_DIR` and uploads each file to `B2_BUCKET_NAME` with key `B2_PREFIX/<relative_path>`
-  - Logs progress and stops on errors
+### **🚨 Common Issues**
 
-- `restore_from_b2.py`:
-  - Lists objects under `B2_PREFIX/` and downloads to `SITE_DIR`
-  - Adds, commits, and pushes the changes to your repo (`GIT_REMOTE`/`GIT_BRANCH`)
-  - GitHub Pages serves from the `/docs` folder, so the push redeploys the site
+<details>
+<summary><strong>❌ "Bucket not found" Error</strong></summary>
+
+**Solution:**
+- Verify bucket exists in Backblaze B2 console
+- Check `B2_BUCKET_NAME` in `.env` matches exactly
+- Ensure bucket is in the correct region
+
+</details>
+
+<details>
+<summary><strong>🔐 "Authentication failed" Error</strong></summary>
+
+**Solution:**
+- Verify `B2_APPLICATION_KEY_ID` and `B2_APPLICATION_KEY` in `.env`
+- Check App Key has required capabilities: `listBuckets`, `readFiles`, `writeFiles`, `listFiles`
+- Generate new App Key if needed
+
+</details>
+
+<details>
+<summary><strong>📁 "No files uploaded" Warning</strong></summary>
+
+**Solution:**
+- Check `SITE_DIR` path in `.env` is correct
+- Verify `docs/` directory contains files
+- Check file permissions
+
+</details>
+
+### Common Issues
+
+1. **"Bucket not found"**: Ensure your bucket exists in Backblaze and the name matches exactly
+2. **"Authentication failed"**: Double-check your `B2_APPLICATION_KEY_ID` and `B2_APPLICATION_KEY`
+3. **"Permission denied"**: Ensure your App Key has the required capabilities (`listBuckets`, `readFiles`, `writeFiles`, `listFiles`)
+4. **"No files uploaded"**: Check that your `SITE_DIR` contains files and the path is correct
+5. **"Authentication required"**: Set `ADMIN_TOKEN` in `.env` or click the Auth button
+
+### **🔍 Debug Commands**
+
+```bash
+# Configuration check
+python -c "from dotenv import load_dotenv; load_dotenv(); import os; print('✅ B2 Bucket:', os.getenv('B2_BUCKET_NAME'))"
+
+# Connection test
+python -c "from backup_to_b2 import init_b2; print('✅ B2 Connection:', init_b2())"
+
+# Log monitoring
+tail -f backup.log              # Backup operations
+tail -f monitor.log             # Health monitoring
+tail -f disaster_recovery.log   # Recovery operations
+```
 
 ---
 
-## Troubleshooting
+## 5. Technologies Used
 
-- Auth errors:
-  - Double-check `B2_APPLICATION_KEY_ID`, `B2_APPLICATION_KEY`, and `B2_BUCKET_NAME`
-  - Ensure your App Key has `readFiles`, `writeFiles`, `listFiles`, `listBuckets`
-  - Confirm the key is not restricted to a different bucket
-- Bucket not found:
-  - Verify `B2_BUCKET_NAME` exists in your account
-- Nothing restored:
-  - Check that `backup_to_b2.py` successfully uploaded files to `B2_PREFIX/`
-  - Verify `B2_PREFIX` in `.env` matches what you used during backup
-- Git push fails:
-  - Ensure you have a valid remote and proper authentication (SSH keys or HTTPS PAT)
-  - Confirm `GIT_REMOTE` and `GIT_BRANCH` are correct
-  - If there are no changes to commit, the script still attempts to push; that's okay
-- GitHub Pages not updating:
-  - Check Settings → Pages configuration (branch and folder)
-  - Wait up to a couple minutes for the deploy to complete
-- Flask backend errors:
-  - Check the terminal running `python server.py` for stack traces
-  - Ensure dependencies are installed and scripts are executable
-  - On Windows, if script execution stalls, confirm `python` is available on PATH
+| Component | Technology |
+|-----------|------------|
+| Backend Server | Flask (Python) |
+| Cloud Storage | Backblaze B2 |
+| Automation | Python scripts |
+| Frontend | HTML, CSS, JS |
+| Hosting | GitHub Pages |
+| Logging | backup.log + metrics.json |
+| Scheduling | Windows Task Scheduler / Cron |
 
 ---
 
-## Notes on Free Tier / Billing
+## 6. Setup Instructions
 
-- This project uses only the free tiers: Backblaze B2 free allocation and GitHub Pages free hosting for public repos.
-- Storage and egress beyond free tier limits may incur charges; monitor your usage in Backblaze.
+### 1️⃣ Install Python
+Make sure Python 3.10+ is installed.
+
+### 2️⃣ Create Virtual Environment
+```bash
+python -m venv venv
+```
+Activate:
+Windows: venv\Scripts\activate
+
+Linux/Mac: source venv/bin/activa
+
+### 3️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+
+### 4️⃣ Create .env File
+```
+Add:
+```bash
+B2_APPLICATION_KEY_ID=xxxx
+B2_APPLICATION_KEY=xxxx
+B2_BUCKET_NAME=xxxx
+```
+## 6. Environment variables
+| Variable | Description |
+|----------|-------------|
+| B2_APPLICATION_KEY_ID | Backblaze key ID |
+| B2_APPLICATION_KEY | Backblaze private key |
+| B2_BUCKET_NAME | Your bucket name: disaster-recovery-bucket |
+
+## 8. Running the Project
+
+**Start the Flask server:**
+```bash
+python server.py
+```
+Admin panel:
+http://localhost:5000/admin
+
+Public site (when running locally):
+http://localhost:5000/
+
+ ---
+## 9. Backup Workflow
+🔁 Steps performed by backup_to_b2.py:
+
+- Zip the /docs folder
+- Upload to Backblaze B2
+- Update metrics.json
+- Append to backup.log
+
+Backups run automatically through:
+- Scheduled tasks
+- Manual trigger from admin panel
 
 ---
 
+## 10. Disaster Simulation
+The /admin dashboard has:
+💥 Simulate Disaster
 
+This will:
+- Completely delete the /docs folder
+- Website becomes unavailable
+- Admin panel still works (because it is outside /docs)
 
+This simulates real-world situations:
+- Accidental deletion
+- Corrupted deployment
+- Malware / ransomware deletion
+- Developer mistakes
+
+---
+
+## 11. Restore Workflow
+When "Restore Website" is clicked:
+
+- Latest backup is downloaded from Backblaze B2
+- Unzipped into /docs
+- Website becomes live again instantly
+
+This demonstrates disaster recovery concepts:
+- Recovery Time Objective (RTO)
+- Recovery Point Objective (RPO)
+
+---
+
+## 12. Monitoring & Logging
+backup.log shows:
+
+text
+[2025-11-12] Backup successful (2.4MB)
+[2025-11-13] Backup failed: network error
+metrics.json stores:
+
+json
+{
+  "last_backup": "2025-11-14 09:33:12",
+  "status": "SUCCESS",
+  "backup_size": "2.4 MB"
+}
+These metrics are displayed in /admin.
+
+---
+
+## 13. GitHub Pages Deployment
+Since GitHub Pages needs either:
+
+- /docs folder
+- root /
+
+✔ Deployed from master branch → /docs folder
+
+GitHub Pages website here:
+https://nidhi-shree.github.io/automated-cloud-backup/
+
+GitHub Pages serves ONLY /docs site(static).
+Admin panel is local-only.
+
+---
+
+## 14. Admin Control Panel
+Admin Panel URL:
+http://localhost:5000/admin
+
+Admin Panel Buttons:
+
+| Button | Function |
+|--------|----------|
+| Backup Now | Triggers backup_to_b2.py |
+| Simulate Disaster | Deletes entire /docs folder |
+| Restore Website | Restores from cloud backup |
+| View Logs | Shows last N log entries |
+
+Admin panel is never deleted, even during disaster, because it lives in Flask templates folder — NOT inside /docs.
+
+---
+
+## 15. Future Improvements
+
+Add user authentication for admin panel
+
+E-mail alerts on backup failure
+
+Versioned backups with timestamps
+
+Real-time WebSocket monitoring
+
+Multi-cloud backup (AWS S3 + Azure Blob)
+
+CLI tool for automation
+
+---
+
+## 16. Conclusion
+
+This project demonstrates:
+
+Real-world cloud backup automation
+
+Disaster recovery engineering
+
+Flask web app development
+
+GitHub Pages deployment
+
+Cloud storage integration
+
+Scheduled task automation
+
+Monitoring/logging systems
+
+---

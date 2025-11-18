@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact • Automated Cloud Backup & Disaster Recovery</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">Cloud Backup DR</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a class="active" href="contact.html">Contact</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button id="editToggle" class="toolbar-btn">Edit Mode</button>
+    <button id="saveChanges" class="toolbar-btn" disabled>Save Changes</button>
+    <button id="backupNow" class="toolbar-btn">Backup</button>
+    <button id="restoreNow" class="toolbar-btn">Restore</button>
+    <button id="simulateDisaster" class="toolbar-btn warn">Simulate Disaster</button>
+  </div>
+
+  <main class="container content">
+    <h1>Get in Touch</h1>
+    <p>We'd love to hear your feedback about this automation demo.</p>
+
+    <form class="card form-grid" onsubmit="return false" novalidate>
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Jane Doe" />
+      </div>
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="jane@example.com" value="" data-bind="contact.email" />
+      </div>
+      <div class="form-field span-2">
+        <label for="message">Message</label>
+        <textarea id="message" rows="6" placeholder="Your message..." data-bind="contact.message"></textarea>
+      </div>
+      <div class="form-actions span-2">
+        <button class="btn primary" type="submit" id="sendMsg">Send Message</button>
+        <button class="btn" type="reset">Reset</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Automated Cloud Backup Demo | Last Backup: <span id="lastBackupFooter">—</span></p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/editor.js"></script>
+  <script>
+    // Mock submit handler for demo
+    document.querySelector('form').addEventListener('submit', function () {
+      if (window.toast) toast('✅ Message sent (demo only)', 'success');
+    });
+  </script>
+</body>
+</html>
+

@@ -1,7 +1,9 @@
+import hashlib
 import logging
 import mimetypes
 import os
 import sys
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -60,29 +62,74 @@ def guess_content_type(path: Path) -> Optional[str]:
     return ctype
 
 
-def upload_directory_to_b2(site_dir: Path, bucket, prefix: str) -> None:
+def calculate_file_hash(file_path: Path) -> str:
+    """Calculate SHA256 hash of a file"""
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(chunk)
+    return sha256_hash.hexdigest()
+
+def upload_file_with_retry(bucket, local_path: Path, b2_name: str, content_type: str, max_retries: int = 3) -> bool:
+    """Upload a single file with retry logic"""
+    for attempt in range(max_retries):
+        try:
+            logging.info("Uploading %s -> b2://%s/%s (attempt %d/%d)", local_path, bucket.name, b2_name, attempt + 1, max_retries)
+            
+            # Calculate file hash for integrity verification
+            file_hash = calculate_file_hash(local_path)
+            
+            file_info = {
+                'sha256': file_hash,
+                'upload_timestamp': str(int(time.time()))
+            }
+            
+            bucket.upload(
+                UploadSourceLocalFile(local_path),
+                file_name=b2_name,
+                content_type=content_type,
+                file_info=file_info
+            )
+            logging.info("Successfully uploaded %s (SHA256: %s)", local_path, file_hash[:8])
+            return True
+        except Exception as exc:
+            logging.warning("Upload attempt %d failed for %s: %s", attempt + 1, local_path, exc)
+            if attempt == max_retries - 1:
+                logging.error("All upload attempts failed for %s", local_path)
+                raise
+            time.sleep(2 ** attempt)  # Exponential backoff
+    return False
+
+def upload_directory_to_b2(site_dir: Path, bucket, prefix: str) -> int:
+    """Upload directory to B2 with retry logic and integrity checks"""
     total_files = 0
+    failed_files = []
+    
     for root, _, files in os.walk(site_dir):
         for filename in files:
             local_path = Path(root) / filename
             rel_path = local_path.relative_to(site_dir).as_posix()
             b2_name = f"{prefix}/{rel_path}".replace("\\", "/")
             content_type = guess_content_type(local_path)
+            
             try:
-                total_files += 1
-                logging.info("Uploading %s -> b2://%s/%s", local_path, bucket.name, b2_name)
-                bucket.upload(
-                    UploadSourceLocalFile(local_path),
-                    file_name=b2_name,
-                    content_type=content_type,
-                )
+                if upload_file_with_retry(bucket, local_path, b2_name, content_type):
+                    total_files += 1
+                else:
+                    failed_files.append(str(local_path))
             except Exception as exc:
-                logging.error("Upload failed for %s: %s", local_path, exc)
-                raise
+                logging.error("Failed to upload %s: %s", local_path, exc)
+                failed_files.append(str(local_path))
+    
+    if failed_files:
+        logging.error("Failed to upload %d files: %s", len(failed_files), failed_files)
+        raise RuntimeError(f"Upload incomplete. {len(failed_files)} files failed.")
+    
     if total_files == 0:
         logging.warning("No files found in %s to upload.", site_dir)
     else:
-        logging.info("Upload complete. %d files uploaded.", total_files)
+        logging.info("Upload complete. %d files uploaded successfully.", total_files)
+    
     return total_files
 
 

@@ -1,0 +1,25 @@
+{
+  "home": {
+    "title": "Automated Backup & Recovery System",
+    "subtitle": "Resilient websites that recover themselves...",
+    "features": []
+  },
+  "about": {
+    "intro": "",
+    "workflow": [
+      "Backup to Backblaze B2",
+      "Simulate a data loss",
+      "Restore and redeploy"
+    ]
+  },
+  "contact": {
+    "email": "",
+    "message": ""
+  },
+  "meta": {
+    "lastBackup": "\u2014",
+    "lastRestore": "\u2014",
+    "backupStatus": "Idle",
+    "totalFiles": 0
+  }
+}
