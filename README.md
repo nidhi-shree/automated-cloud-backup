@@ -12,12 +12,12 @@
 ## This project is a fully automated cloud-backup and disaster-recovery system designed to protect a static website and supporting files using Backblaze B2 Cloud Storage, Flask, and Python automation scripts.
 It provides:
 
-✔ Automatic scheduled backups
-✔ Instant disaster simulation
-✔ One-click website restoration
-✔ Real-time monitoring dashboard
-✔ GitHub Pages hosting for the public website (/docs)
-✔ A persistent /admin control panel that cannot be deleted
+- Automatic scheduled backups
+- Instant disaster simulation
+- One-click website restoration
+- Real-time monitoring dashboard
+- GitHub Pages hosting for the public website (/docs)
+- A persistent /admin control panel that cannot be deleted
 
 ---
 
@@ -60,7 +60,7 @@ It is fully automated and runs as a scheduled background job.
 ---
 
 ## 2. System Architecture
-
+```
 ┌───────────────────────────┐
 │       GitHub Pages        │
 │  Hosts the /docs website  │
@@ -88,12 +88,12 @@ It is fully automated and runs as a scheduled background job.
                ▼
        Cloud Storage  
      Backblaze B2 Bucket
-
+```
 
 ---
 
 ## 3. Project Structure
-
+```bash
 automated-cloud-backup/
 │
 ├── docs/                        # Public website served by GitHub Pages
@@ -115,7 +115,7 @@ automated-cloud-backup/
 ├── requirements.txt             # Python dependencies
 ├── .env                         # API keys (ignored in Git)
 └── README.md                    # Project documentation
-
+```
 ---
 
 ## 4. Features
