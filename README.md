@@ -59,6 +59,18 @@ It is fully automated and runs as a scheduled background job.
 
 ---
 
+## 🖼️ System Screenshots
+
+Here are key views of the automated backup and recovery system in action:
+
+| **Admin Control Panel** | **Live Content Editing** |
+| :---: | :---: |
+| ![Admin Panel View](screenshots/admin_panel.png) | ![Live Edit View](screenshots/live_edit.png) |
+| **Website Homepage** | **Restore After Disaster** |
+| ![Homepage View](screenshots/home1.png) | ![Restore Success View](screenshots/restore_after_disaster.png) |
+
+---
+
 ## 2. System Architecture
 ```
 ┌───────────────────────────┐
